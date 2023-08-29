@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Tarefa</title>
+</head>
+<body>
+    <h1>Editar Tarefa</h1>
+    <form method="POST" action="/atualizar/{{ tarefa[0] }}">
+        <label for="nova_descricao">Nova Descrição:</label>
+        <input type="text" id="nova_descricao" name="nova_descricao" value="{{ tarefa[1] }}">
+        <button type="submit">Atualizar</button>
+    </form>
+</body>
+</html>
