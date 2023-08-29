@@ -8,6 +8,7 @@ app = Flask(__name__)
 # A descricao da tarefa é armazenada como o valor correspondente. Isso torna mais eficiente a leitura e manipulação das tarefas, 
 # uma vez que é mais fácil e rápido buscar uma tarefa específica por seu id.
 
+# Definindo uma função para criar a tabela de tarefas no banco de dados
 def criar_tabela():
     conn = sqlite3.connect('lista_tarefas.db')
     cursor = conn.cursor()
@@ -19,6 +20,7 @@ def criar_tabela():
     ''')
     conn.close()
 
+# Definindo função para criar uma nova tarefa
 def criar_tarefa(descricao):
     conn = sqlite3.connect('lista_tarefas.db')
     cursor = conn.cursor()
@@ -26,6 +28,7 @@ def criar_tarefa(descricao):
     conn.commit()
     conn.close()
 
+# Definindo função para ler todas as tarefas do banco de dados
 def ler_tarefas():
     conn = sqlite3.connect('lista_tarefas.db')
     cursor = conn.cursor()
@@ -34,6 +37,7 @@ def ler_tarefas():
     conn.close()
     return tarefas
 
+# Definindo função para ler uma tarefa específica por seu id
 def ler_tarefa_por_id(id):
     conn = sqlite3.connect('lista_tarefas.db')
     cursor = conn.cursor()
@@ -42,6 +46,7 @@ def ler_tarefa_por_id(id):
     conn.close()
     return tarefa
 
+# Definindo função para atualizar a descrição de uma tarefa
 def atualizar_tarefa(id, nova_descricao):
     conn = sqlite3.connect('lista_tarefas.db')
     cursor = conn.cursor()
@@ -49,6 +54,7 @@ def atualizar_tarefa(id, nova_descricao):
     conn.commit()
     conn.close()
 
+# Definindo função para deletar uma tarefa por seu id
 def deletar_tarefa(id):
     conn = sqlite3.connect('lista_tarefas.db')
     cursor = conn.cursor()
@@ -56,33 +62,39 @@ def deletar_tarefa(id):
     conn.commit()
     conn.close()
 
+# Rota para exibir todas as tarefas
 @app.route('/')
 def exibir_tarefas():
     criar_tabela()
     tarefas = ler_tarefas()
     return render_template('tarefas.html', tarefas=tarefas)
 
+# Rota para adicionar uma nova tarefa
 @app.route('/adicionar', methods=['POST'])
 def adicionar_tarefa():
     descricao = request.form.get('descricao')
     criar_tarefa(descricao)
     return redirect('/')
 
+# Rota para exibir o formulário de edição de tarefa
 @app.route('/editar/<int:id>')
 def editar_tarefa(id):
     tarefa = ler_tarefa_por_id(id)
     return render_template('editar_tarefa.html', tarefa=tarefa)
 
+# Rota para atualizar uma tarefa
 @app.route('/atualizar/<int:id>', methods=['POST'])
 def atualizar_tarefa_rota(id):
     nova_descricao = request.form.get('nova_descricao')
     atualizar_tarefa(id, nova_descricao)
     return redirect('/')
 
+# Rota para deletar uma tarefa
 @app.route('/deletar/<int:id>')
 def deletar_tarefa_rota(id):
     deletar_tarefa(id)
     return redirect('/')
 
+# Iniciando a aplicação Flask
 if __name__ == '__main__':
     app.run()
