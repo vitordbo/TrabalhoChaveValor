@@ -14,6 +14,7 @@ def index():
     keys = r.keys('*')
     records = [{'key': key.decode('utf-8'), 'value': r.get(key).decode('utf-8')} for key in keys]
     return render_template('index.html', records=records)
+
 @app.route('/crud', methods=['POST'])
 def create_update_value():
     key = request.form.get('key')

@@ -2,24 +2,89 @@
 <html>
 <head>
     <title>CRUD com Redis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
+        h1 {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+            text-align: center;
+        }
+
+        #container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #crud-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #crud-form input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            flex: 1;
+        }
+
+        #crud-form button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        #last-action {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        #record-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        #record-list li {
+            margin-bottom: 5px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 3px;
+            background-color: #fff;
+        }
+    </style>
 </head>
 <body>
-    <h1>CRUD com Redis</h1>
-    <form id="crud-form">
-        <input type="text" name="key" placeholder="Chave">
-        <input type="text" name="value" placeholder="Valor">
-        <button type="button" onclick="crudAction('POST')">Criar/Atualizar</button>
-        <button type="button" onclick="crudAction('PUT')">Editar</button>
-        <button type="button" onclick="crudAction('DELETE')">Excluir</button>
-    </form>
-    <h2>Última Ação:</h2>
-    <p id="last-action"></p>
-    <h2>Registros Salvos:</h2>
-    <ul id="record-list">
-        {% for record in records %}
-        <li>Chave: {{ record.key }}, Valor: {{ record.value }}</li>
-        {% endfor %}
-    </ul>
+    <h1>Trabalho BD Chave-Valor - Redis</h1>
+    <div id="container">
+        <form id="crud-form">
+            <input type="text" name="key" placeholder="Chave">
+            <input type="text" name="value" placeholder="Valor">
+            <button type="button" onclick="crudAction('POST')">Criar/Atualizar</button>
+            <button type="button" onclick="crudAction('PUT')">Editar</button>
+            <button type="button" onclick="crudAction('DELETE')">Excluir</button>
+        </form>
+        <p id="last-action"></p>
+        <h2>Registros Salvos:</h2>
+        <ul id="record-list">
+            {% for record in records %}
+            <li>Chave: {{ record.key }}, Valor: {{ record.value }}</li>
+            {% endfor %}
+        </ul>
+    </div>
     <script>
       function crudAction(method) {
         const key = document.querySelector('#crud-form [name="key"]').value;
