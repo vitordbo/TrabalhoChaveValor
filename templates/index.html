@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CRUD com Redis</title>
+</head>
+<body>
+    <h1>CRUD com Redis</h1>
+    <form id="crud-form">
+        <input type="text" name="key" placeholder="Chave">
+        <input type="text" name="value" placeholder="Valor">
+        <button type="button" onclick="crudAction('POST')">Criar/Atualizar</button>
+        <button type="button" onclick="crudAction('PUT')">Editar</button>
+        <button type="button" onclick="crudAction('DELETE')">Excluir</button>
+    </form>
+    <h2>Última Ação:</h2>
+    <p id="last-action"></p>
+    <h2>Registros Salvos:</h2>
+    <ul id="record-list">
+        {% for record in records %}
+        <li>Chave: {{ record.key }}, Valor: {{ record.value }}</li>
+        {% endfor %}
+    </ul>
+    <script>
+      function crudAction(method) {
+        const key = document.querySelector('#crud-form [name="key"]').value;
+        const value = document.querySelector('#crud-form [name="value"]').value;
+        fetch('/crud', {
+            method: method,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                'key': key,
+                'value': value
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const lastAction = document.querySelector('#last-action');
+            lastAction.textContent = data.message;
+            if (data.redirect) {
+                window.location.href = data.redirect;  // Redirect to the homepage
+            }
+            updateRecordList();
+        });
+    }
+
+        function updateRecordList() {
+            fetch('/')
+                .then(response => response.text())
+                .then(data => {
+                    const recordList = document.querySelector('#record-list');
+                    recordList.innerHTML = data;
+                });
+        }
+    </script>
+</body>
+</html>
